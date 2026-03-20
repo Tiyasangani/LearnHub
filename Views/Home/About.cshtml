@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "About Us";
+}
+
+<section style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:80px 0;" class="text-white text-center">
+    <div class="container">
+        <h1 class="fw-bold mb-3">About LearnHub</h1>
+        <p class="text-white-50 fs-5">Empowering learners worldwide with world-class online education</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5 align-items-center mb-5">
+        <div class="col-lg-6">
+            <span class="lh-section-label">OUR MISSION</span>
+            <h2 class="lh-section-title">Learning Without Limits</h2>
+            <p class="text-muted">At LearnHub, we believe that quality education should be accessible to everyone, everywhere. Our platform connects passionate learners with expert instructors from around the world.</p>
+            <p class="text-muted">Whether you're looking to advance your career, pick up a new skill, or explore a passion project, we have the courses to help you get there.</p>
+        </div>
+        <div class="col-lg-6">
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="lh-card p-4 text-center">
+                        <h3 class="fw-bold text-primary mb-1">120K+</h3>
+                        <p class="text-muted small mb-0">Active Students</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="lh-card p-4 text-center">
+                        <h3 class="fw-bold text-success mb-1">500+</h3>
+                        <p class="text-muted small mb-0">Courses</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="lh-card p-4 text-center">
+                        <h3 class="fw-bold text-warning mb-1">50+</h3>
+                        <p class="text-muted small mb-0">Expert Instructors</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="lh-card p-4 text-center">
+                        <h3 class="fw-bold text-danger mb-1">95%</h3>
+                        <p class="text-muted small mb-0">Satisfaction Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div class="text-center mb-5">
+        <span class="lh-section-label">OUR VALUES</span>
+        <h2 class="lh-section-title">What We Stand For</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        @foreach (var val in new[] {
+            new { Icon = "bi-lightbulb", Title = "Innovation", Text = "Constantly evolving our platform with the latest technology.", Color = "text-warning" },
+            new { Icon = "bi-people", Title = "Community", Text = "Building a global community of learners and educators.", Color = "text-primary" },
+            new { Icon = "bi-shield-check", Title = "Quality", Text = "Rigorous standards ensure every course meets our benchmark.", Color = "text-success" },
+            new { Icon = "bi-universal-access", Title = "Accessibility", Text = "Making world-class education affordable and available for all.", Color = "text-danger" },
+        })
+        {
+            <div class="col-md-3 col-6">
+                <div class="lh-card p-4 text-center h-100">
+                    <i class="bi @val.Icon @val.Color fs-2 mb-3"></i>
+                    <h6 class="fw-bold mb-2">@val.Title</h6>
+                    <p class="text-muted small mb-0">@val.Text</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="lh-cta rounded-4 p-5 text-center text-white">
+        <h3 class="fw-bold mb-2">Ready to Start Learning?</h3>
+        <p class="opacity-75 mb-4">Join 120,000+ students already on LearnHub.</p>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg px-5">Get Started for Free</a>
+    </div>
+</div>

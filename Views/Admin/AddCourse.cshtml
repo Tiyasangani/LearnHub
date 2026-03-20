@@ -1,0 +1,81 @@
+@model LearnHub.Models.Course
+@{
+    ViewData["Title"] = "Add New Course";
+    ViewData["ActivePage"] = "AddCourse";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-0">Add New Course</h4>
+        <p class="text-muted small mb-0">Fill in the details to create a new course</p>
+    </div>
+    <a asp-action="ManageCourses" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back
+    </a>
+</div>
+
+<div class="lh-card p-4" style="max-width:720px;">
+    <form asp-action="AddCourse" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label small fw-semibold">Course Title <span class="text-danger">*</span></label>
+                <input asp-for="Title" class="form-control" placeholder="e.g. Introduction to Python" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold">Instructor <span class="text-danger">*</span></label>
+                <input asp-for="Instructor" class="form-control" placeholder="Dr. John Smith" />
+                <span asp-validation-for="Instructor" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-semibold">Category <span class="text-danger">*</span></label>
+                <select asp-for="Category" class="form-select">
+                    <option value="">-- Select Category --</option>
+                    <option>Programming</option>
+                    <option>Web Development</option>
+                    <option>Data Science</option>
+                    <option>Design</option>
+                    <option>Artificial Intelligence</option>
+                    <option>Marketing</option>
+                    <option>Mobile Development</option>
+                    <option>Cybersecurity</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold">Price (₹) <span class="text-danger">*</span></label>
+                <input asp-for="Price" type="number" step="0.01" min="0" class="form-control" placeholder="499" />
+                <span asp-validation-for="Price" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold">Rating</label>
+                <input asp-for="Rating" type="number" step="0.1" min="1" max="5" class="form-control" placeholder="4.5" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold">Student Count</label>
+                <input asp-for="StudentCount" type="number" min="0" class="form-control" placeholder="0" />
+            </div>
+            <div class="col-12">
+                <label class="form-label small fw-semibold">Thumbnail Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://images.unsplash.com/..." />
+                <div class="form-text">Use a direct image URL (e.g. from Unsplash)</div>
+            </div>
+            <div class="col-12">
+                <label class="form-label small fw-semibold">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"
+                          placeholder="Brief description of the course..."></textarea>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                <i class="bi bi-plus-circle me-1"></i>Add Course
+            </button>
+            <a asp-action="ManageCourses" class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+    </form>
+</div>

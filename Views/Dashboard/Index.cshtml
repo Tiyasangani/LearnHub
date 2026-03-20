@@ -1,0 +1,262 @@
+@{
+    ViewData["Title"] = "My Dashboard";
+    var user = ViewBag.User as LearnHub.Models.User;
+    var enrollments = ViewBag.Enrollments as List<LearnHub.Models.Enrollment> ?? new();
+    var attempts = ViewBag.Attempts as List<LearnHub.Models.QuizAttempt> ?? new();
+    var certificates = ViewBag.Certificates as List<LearnHub.Models.Certificate> ?? new();
+}
+
+<!-- Hero -->
+<div class="db-hero">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <div class="db-hero-avatar">@user?.FullName[0]</div>
+            <div>
+                <h4 class="fw-bold text-white mb-0">Welcome back, @user?.FullName! 👋</h4>
+                <p class="text-white-50 small mb-0">@user?.Email</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+
+    <!-- Stats row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="db-stat-card">
+                <div class="db-stat-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-journal-bookmark-fill"></i></div>
+                <div class="db-stat-num">@enrollments.Count</div>
+                <div class="db-stat-label">Enrolled Courses</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="db-stat-card">
+                <div class="db-stat-icon bg-success bg-opacity-10 text-success"><i class="bi bi-patch-check-fill"></i></div>
+                <div class="db-stat-num">@certificates.Count</div>
+                <div class="db-stat-label">Certificates</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="db-stat-card">
+                <div class="db-stat-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-trophy-fill"></i></div>
+                <div class="db-stat-num">@attempts.Count(a => a.Passed)</div>
+                <div class="db-stat-label">Quizzes Passed</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="db-stat-card">
+                <div class="db-stat-icon bg-info bg-opacity-10 text-info"><i class="bi bi-lightning-fill"></i></div>
+                <div class="db-stat-num">@attempts.Count</div>
+                <div class="db-stat-label">Quiz Attempts</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- My Courses -->
+        <div class="col-lg-8">
+            <div class="lh-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-bold mb-0"><i class="bi bi-journal-bookmark text-primary me-2"></i>My Enrolled Courses</h6>
+                    <a asp-controller="Courses" asp-action="Index" class="btn btn-sm btn-outline-primary">Browse More</a>
+                </div>
+
+                @if (!enrollments.Any())
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-journal-x display-4 text-muted"></i>
+                        <p class="text-muted mt-2">No courses yet. Start learning today!</p>
+                        <a asp-controller="Courses" asp-action="Index" class="btn btn-primary btn-sm">Browse Courses</a>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var e in enrollments)
+                    {
+                        var passed = attempts.Any(a => a.CourseId == e.CourseId && a.Passed);
+                        var hasCert = certificates.Any(c => c.CourseId == e.CourseId);
+                        <div class="db-course-row">
+                            <img src="@e.Course?.ImageUrl" alt="" class="db-course-thumb"
+                                 onerror="this.src='/images/course-default.jpg'" />
+                            <div class="flex-grow-1 min-w-0">
+                                <div class="fw-semibold small text-truncate">@e.Course?.Title</div>
+                                <div class="text-muted" style="font-size:.75rem;">@e.Course?.Instructor</div>
+                                <div class="d-flex align-items-center gap-1 mt-1">
+                                    @if (hasCert)
+                                    {
+                                        <span class="badge bg-success" style="font-size:.7rem;"><i class="bi bi-patch-check me-1"></i>Certified</span>
+                                    }
+                                    else if (passed)
+                                    {
+                                        <span class="badge bg-primary" style="font-size:.7rem;"><i class="bi bi-check me-1"></i>Passed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-25 text-secondary" style="font-size:.7rem;">In Progress</span>
+                                    }
+                                    <span class="text-muted" style="font-size:.72rem;">Enrolled @e.EnrolledAt.ToString("MMM dd, yyyy")</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1">
+                                @if (hasCert)
+                                {
+                                    <a asp-controller="Certificate" asp-action="View" asp-route-courseId="@e.CourseId"
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-award"></i> Certificate
+                                    </a>
+                                }
+                                <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@e.CourseId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-play-circle"></i> Quiz
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Quiz History -->
+            <div class="lh-card p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-clock-history text-primary me-2"></i>Quiz History</h6>
+                @if (!attempts.Any())
+                {
+                    <p class="text-muted small">No quiz attempts yet.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="small">Course</th>
+                                    <th class="small">Score</th>
+                                    <th class="small">Result</th>
+                                    <th class="small">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var a in attempts.Take(5))
+                                {
+                                    <tr>
+                                        <td class="small fw-semibold">@a.Course?.Title</td>
+                                        <td class="small">@a.Score / @a.TotalQuestions</td>
+                                        <td>
+                                            @if (a.Passed)
+                                            {
+                                                <span class="badge bg-success">Passed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Failed</span>
+                                            }
+                                        </td>
+                                        <td class="small text-muted">@a.AttemptedAt.ToString("MMM dd")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right sidebar -->
+        <div class="col-lg-4">
+            <!-- Certificates -->
+            <div class="lh-card p-4 mb-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-award text-warning me-2"></i>My Certificates</h6>
+                @if (!certificates.Any())
+                {
+                    <div class="text-center py-3">
+                        <i class="bi bi-award display-5 text-muted"></i>
+                        <p class="text-muted small mt-2">Pass a quiz to earn your first certificate!</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var cert in certificates)
+                    {
+                        <div class="db-cert-row">
+                            <div class="db-cert-icon"><i class="bi bi-patch-check-fill text-warning"></i></div>
+                            <div class="flex-grow-1">
+                                <div class="small fw-semibold">@cert.Course?.Title</div>
+                                <div class="text-muted" style="font-size:.72rem;">Issued @cert.IssuedAt.ToString("MMM dd, yyyy")</div>
+                            </div>
+                            <a asp-controller="Certificate" asp-action="View" asp-route-courseId="@cert.CourseId"
+                               class="btn btn-sm btn-outline-warning">View</a>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Quick actions -->
+            <div class="lh-card p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-lightning text-primary me-2"></i>Quick Actions</h6>
+                <div class="d-grid gap-2">
+                    <a asp-controller="Courses" asp-action="Index" class="btn btn-primary btn-sm">
+                        <i class="bi bi-search me-1"></i> Browse Courses
+                    </a>
+                    <a asp-controller="Account" asp-action="EditProfile" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-person-gear me-1"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.db-hero {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    padding: 2rem 0;
+}
+.db-hero-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; font-weight: 800;
+    border: 3px solid rgba(255,255,255,.2);
+}
+.db-stat-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+.db-stat-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: .5rem;
+}
+.db-stat-num { font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1; }
+.db-stat-label { font-size: .75rem; color: #64748b; margin-top: .2rem; }
+.db-course-row {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .75rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.db-course-row:last-child { border-bottom: none; }
+.db-course-thumb {
+    width: 60px; height: 44px;
+    border-radius: 8px; object-fit: cover; flex-shrink: 0;
+}
+.db-cert-row {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .6rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.db-cert-row:last-child { border-bottom: none; }
+.db-cert-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px; background: #fefce8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+}
+</style>

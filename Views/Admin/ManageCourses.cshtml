@@ -1,0 +1,76 @@
+@model List<LearnHub.Models.Course>
+@{
+    ViewData["Title"] = "Manage Courses";
+    ViewData["ActivePage"] = "Courses";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-0">Manage Courses</h4>
+        <p class="text-muted small mb-0">@Model.Count course(s) total</p>
+    </div>
+    <a asp-action="AddCourse" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>Add New Course
+    </a>
+</div>
+
+<div class="lh-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Course</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Rating</th>
+                    <th>Students</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in Model)
+                {
+                    <tr>
+                        <td class="text-muted small">@course.Id</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="@course.ImageUrl" alt="" class="rounded"
+                                     style="width:48px;height:36px;object-fit:cover;"
+                                     onerror="this.src='/images/course-default.jpg'" />
+                                <div>
+                                    <div class="fw-semibold small">@course.Title</div>
+                                    <div class="text-muted" style="font-size:.75rem;">@course.Instructor</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary bg-opacity-10 text-primary">@course.Category</span></td>
+                        <td class="fw-semibold">₹@course.Price</td>
+                        <td>
+                            <i class="bi bi-star-fill text-warning small"></i>
+                            <span class="small">@course.Rating</span>
+                        </td>
+                        <td class="small">@course.StudentCount.ToString("N0")</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a asp-action="EditCourse" asp-route-id="@course.Id"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form asp-action="DeleteCourse" method="post" style="display:inline"
+                                      onsubmit="return confirm('Delete this course?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@course.Id" />
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+@model LearnHub.Models.Certificate
+@{
+    ViewData["Title"] = "Certificate";
+}
+
+<div class="container py-5">
+    <!-- Certificate card -->
+    <div class="lh-certificate mx-auto" id="certCard">
+        <div class="lh-cert-header">
+            <span class="lh-logo-icon me-2"><i class="bi bi-journal-bookmark-fill"></i></span>
+            <span class="fw-bold fs-5">LearnHub</span>
+        </div>
+
+        <p class="lh-cert-label">CERTIFICATE OF COMPLETION</p>
+
+        <p class="lh-cert-awarded">This is to certify that</p>
+        <h2 class="lh-cert-name">@Model.User?.FullName</h2>
+
+        <p class="lh-cert-awarded">has successfully completed the course</p>
+        <h4 class="lh-cert-course">"@Model.Course?.Title"</h4>
+
+        <div class="lh-cert-meta">
+            <div><span class="text-muted small">Instructor</span><br /><strong>@Model.Course?.Instructor</strong></div>
+            <div><span class="text-muted small">Date Issued</span><br /><strong>@Model.IssuedAt.ToString("MMMM dd, yyyy")</strong></div>
+            <div><span class="text-muted small">Certificate No.</span><br /><strong class="text-primary">@Model.CertificateNumber</strong></div>
+        </div>
+
+        <div class="lh-cert-footer">
+            <div class="lh-cert-sig">
+                <div class="lh-cert-sig-line"></div>
+                <small class="text-muted">Course Instructor</small>
+            </div>
+            <div class="lh-cert-badge">
+                <i class="bi bi-patch-check-fill text-primary"></i>
+                <small>Verified</small>
+            </div>
+            <div class="lh-cert-sig">
+                <div class="lh-cert-sig-line"></div>
+                <small class="text-muted">LearnHub CEO</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center mt-4 d-flex justify-content-center gap-3">
+        <button class="btn btn-primary px-4" onclick="window.print()">
+            <i class="bi bi-download me-1"></i>Download Certificate
+        </button>
+        <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-secondary px-4">Browse More Courses</a>
+    </div>
+</div>
+
+<style>
+@@media print {
+    nav, footer, .btn, .lh-navbar { display: none !important; }
+    .lh-certificate { box-shadow: none !important; border: 2px solid #ccc !important; }
+}
+</style>

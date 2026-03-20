@@ -1,0 +1,28 @@
+@model LearnHub.Models.Course
+
+<div class="col-md-6 col-lg-3">
+    <div class="lh-course-card">
+        <div class="lh-course-img-wrap">
+            <img src="@Model.ImageUrl" alt="@Model.Title" class="lh-course-img" loading="lazy" onerror="this.src='/images/course-default.jpg'" />
+            <span class="lh-course-badge">@Model.Category</span>
+        </div>
+        <div class="lh-course-body">
+            <h6 class="lh-course-title">@Model.Title</h6>
+            <p class="lh-course-instructor text-muted small mb-1">@Model.Instructor</p>
+            <div class="d-flex align-items-center gap-1 mb-2">
+                <i class="bi bi-star-fill text-warning small"></i>
+                <span class="small fw-semibold">@Model.Rating</span>
+                <span class="small text-muted">(@Model.StudentCount.ToString("N0") students)</span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mt-2">
+                <span class="lh-price fw-bold">₹@Model.Price</span>
+                <a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id"
+                   class="btn btn-primary btn-sm">View Course</a>
+            </div>
+            <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@Model.Id"
+               class="btn btn-success btn-sm w-100 mt-2">
+                <i class="bi bi-play-circle me-1"></i>Take Quiz
+            </a>
+        </div>
+    </div>
+</div>

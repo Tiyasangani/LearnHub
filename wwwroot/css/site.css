@@ -1,0 +1,659 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   LearnHub — site.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ─────────────────────────────────────────────────────── */
+:root {
+    --lh-blue:      #2563eb;
+    --lh-blue-dark: #1d4ed8;
+    --lh-dark:      #0f172a;
+    --lh-dark2:     #1e293b;
+    --lh-text:      #334155;
+    --lh-muted:     #64748b;
+    --lh-border:    #e2e8f0;
+    --lh-bg:        #f8fafc;
+    --lh-green:     #16a34a;
+    --lh-radius:    12px;
+    --lh-shadow:    0 4px 24px rgba(0,0,0,.07);
+    --lh-shadow-lg: 0 8px 40px rgba(0,0,0,.12);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--lh-text);
+    background: #fff;
+}
+
+/* ── Navbar ────────────────────────────────────────────────────────────── */
+.lh-navbar {
+    background: var(--lh-dark);
+    padding: .85rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 0 rgba(255,255,255,.05);
+}
+
+.lh-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.lh-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: var(--lh-blue);
+    border-radius: 8px;
+    color: #fff;
+    font-size: .95rem;
+}
+
+.lh-navbar .nav-link {
+    color: rgba(255,255,255,.7) !important;
+    font-size: .9rem;
+    font-weight: 500;
+    transition: color .2s;
+    padding: .4rem .75rem;
+}
+
+.lh-navbar .nav-link:hover,
+.lh-navbar .nav-link.active {
+    color: #fff !important;
+}
+
+.nav-admin-link {
+    color: #f87171;
+    font-weight: 600;
+    font-size: .9rem;
+    text-decoration: none;
+    padding: .4rem .75rem;
+    transition: color .2s;
+}
+
+.nav-admin-link:hover { color: #fca5a5; }
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.lh-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%);
+    padding: 100px 0 90px;
+    color: #fff;
+}
+
+.lh-hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 50px;
+    padding: .35rem 1rem;
+    font-size: .82rem;
+    color: rgba(255,255,255,.85);
+    margin-bottom: 1.25rem;
+}
+
+.lh-hero-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.lh-hero-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,.72);
+    margin-bottom: 1.5rem;
+}
+
+.lh-hero-stats {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    color: rgba(255,255,255,.65);
+    font-size: .9rem;
+}
+
+/* ── Courses hero ───────────────────────────────────────────────────────── */
+.lh-courses-hero {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    padding: 60px 0;
+    color: #fff;
+}
+
+/* ── Search ─────────────────────────────────────────────────────────────── */
+.lh-search-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+}
+
+.lh-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--lh-muted);
+    pointer-events: none;
+}
+
+.lh-search-input {
+    padding-left: 2.8rem;
+    height: 52px;
+    border-radius: 12px;
+    border: none;
+    font-size: .95rem;
+    width: 100%;
+    box-shadow: var(--lh-shadow);
+}
+
+.lh-search-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,.25); }
+
+/* ── Filter pills ───────────────────────────────────────────────────────── */
+.lh-filter-bar {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.lh-filter-pill {
+    display: inline-block;
+    padding: .35rem 1rem;
+    border-radius: 50px;
+    border: 1.5px solid var(--lh-border);
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--lh-text);
+    text-decoration: none;
+    transition: all .2s;
+    background: #fff;
+}
+
+.lh-filter-pill:hover {
+    border-color: var(--lh-blue);
+    color: var(--lh-blue);
+}
+
+.lh-filter-pill.active {
+    background: var(--lh-blue);
+    border-color: var(--lh-blue);
+    color: #fff;
+}
+
+/* ── Section labels ─────────────────────────────────────────────────────── */
+.lh-section-label {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--lh-blue);
+    display: block;
+    margin-bottom: .4rem;
+}
+
+.lh-section-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: .5rem;
+}
+
+/* ── Course card ─────────────────────────────────────────────────────────── */
+.lh-course-card {
+    border-radius: var(--lh-radius);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: var(--lh-shadow);
+    transition: transform .25s, box-shadow .25s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--lh-border);
+}
+
+.lh-course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--lh-shadow-lg);
+}
+
+.lh-course-img-wrap {
+    position: relative;
+    overflow: hidden;
+}
+
+.lh-course-img {
+    width: 100%;
+    height: 175px;
+    object-fit: cover;
+    transition: transform .35s;
+}
+
+.lh-course-card:hover .lh-course-img { transform: scale(1.04); }
+
+.lh-course-badge {
+    position: absolute;
+    top: .65rem;
+    left: .65rem;
+    background: var(--lh-blue);
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .2rem .65rem;
+    border-radius: 50px;
+}
+
+.lh-course-body {
+    padding: 1rem 1rem .75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.lh-course-title {
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: .25rem;
+}
+
+.lh-price {
+    font-size: 1.1rem;
+    color: #0f172a;
+}
+
+/* ── Category card ───────────────────────────────────────────────────────── */
+.lh-category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: #fff;
+    border: 1.5px solid var(--lh-border);
+    border-radius: var(--lh-radius);
+    transition: all .22s;
+    color: var(--lh-text);
+    text-decoration: none;
+}
+
+.lh-category-card:hover {
+    border-color: var(--lh-blue);
+    background: #eff6ff;
+    color: var(--lh-blue);
+    transform: translateY(-3px);
+    box-shadow: var(--lh-shadow);
+}
+
+.lh-cat-icon { font-size: 1.8rem; color: var(--lh-blue); }
+
+/* ── CTA Banner ──────────────────────────────────────────────────────────── */
+.lh-cta {
+    background: linear-gradient(135deg, var(--lh-blue), #7c3aed);
+    padding: 70px 0;
+    color: #fff;
+}
+
+/* ── Auth pages ──────────────────────────────────────────────────────────── */
+.lh-auth-page {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: var(--lh-bg);
+}
+
+.lh-auth-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--lh-shadow-lg);
+    border: 1px solid var(--lh-border);
+}
+
+.lh-auth-logo {
+    width: 52px;
+    height: 52px;
+    background: var(--lh-blue);
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    margin: 0 auto;
+}
+
+/* ── Input wrappers ──────────────────────────────────────────────────────── */
+.lh-input-wrap {
+    position: relative;
+}
+
+.lh-input-icon {
+    position: absolute;
+    left: .85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--lh-muted);
+    pointer-events: none;
+    font-size: .9rem;
+}
+
+.lh-input {
+    padding-left: 2.5rem;
+    height: 46px;
+    border-radius: 10px;
+    border: 1.5px solid var(--lh-border);
+    font-size: .9rem;
+    transition: border-color .2s;
+}
+
+.lh-input:focus {
+    border-color: var(--lh-blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+    outline: none;
+}
+
+.lh-eye-btn {
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--lh-muted);
+    cursor: pointer;
+    padding: 0;
+}
+
+/* ── Links ──────────────────────────────────────────────────────────────── */
+.lh-link { color: var(--lh-blue); text-decoration: none; }
+.lh-link:hover { color: var(--lh-blue-dark); text-decoration: underline; }
+
+/* ── Generic card ────────────────────────────────────────────────────────── */
+.lh-card {
+    background: #fff;
+    border-radius: var(--lh-radius);
+    border: 1px solid var(--lh-border);
+    box-shadow: var(--lh-shadow);
+}
+
+/* ── Payment tabs ────────────────────────────────────────────────────────── */
+.lh-pay-tab {
+    flex: 1;
+    padding: .6rem;
+    border: 1.5px solid var(--lh-border);
+    border-radius: 10px;
+    background: #fff;
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--lh-text);
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.lh-pay-tab.active {
+    border-color: var(--lh-blue);
+    background: #eff6ff;
+    color: var(--lh-blue);
+}
+
+/* ── Quiz options ────────────────────────────────────────────────────────── */
+.lh-quiz-option {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1rem;
+    border: 1.5px solid var(--lh-border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .18s;
+    user-select: none;
+}
+
+.lh-quiz-option:hover { border-color: var(--lh-blue); background: #eff6ff; }
+.lh-quiz-option.selected { border-color: var(--lh-blue); background: #eff6ff; font-weight: 600; }
+.lh-quiz-option input[type="radio"] { accent-color: var(--lh-blue); }
+
+/* ── Score ring ──────────────────────────────────────────────────────────── */
+.lh-score-ring {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: conic-gradient(var(--lh-blue) 0%, #e2e8f0 0%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.lh-score-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--lh-blue);
+    background: #fff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Certificate ─────────────────────────────────────────────────────────── */
+.lh-certificate {
+    background: #fff;
+    border: 3px solid var(--lh-blue);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    max-width: 760px;
+    box-shadow: var(--lh-shadow-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.lh-certificate::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--lh-blue), #7c3aed, #06b6d4);
+}
+
+.lh-cert-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--lh-blue);
+}
+
+.lh-cert-label {
+    font-size: .8rem;
+    letter-spacing: .18em;
+    font-weight: 700;
+    color: var(--lh-muted);
+    margin-bottom: 1rem;
+}
+
+.lh-cert-awarded {
+    font-size: .95rem;
+    color: var(--lh-muted);
+    margin-bottom: .25rem;
+}
+
+.lh-cert-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: .75rem;
+}
+
+.lh-cert-course {
+    font-weight: 700;
+    color: var(--lh-blue);
+    margin-bottom: 2rem;
+}
+
+.lh-cert-meta {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--lh-bg);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.lh-cert-footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.lh-cert-sig { text-align: center; }
+.lh-cert-sig-line {
+    width: 140px;
+    border-bottom: 2px solid #cbd5e1;
+    margin: 0 auto .4rem;
+}
+
+.lh-cert-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .25rem;
+    font-size: 2rem;
+}
+
+/* ── Contact ─────────────────────────────────────────────────────────────── */
+.lh-contact-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.lh-footer {
+    background: var(--lh-dark);
+    color: rgba(255,255,255,.6);
+    padding: 60px 0 30px;
+}
+
+.lh-footer-links { list-style: none; padding: 0; }
+.lh-footer-links li { margin-bottom: .5rem; }
+.lh-footer-links a {
+    color: rgba(255,255,255,.5);
+    text-decoration: none;
+    font-size: .9rem;
+    transition: color .2s;
+}
+.lh-footer-links a:hover { color: rgba(255,255,255,.9); }
+
+.lh-social-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+    font-size: .9rem;
+}
+.lh-social-btn:hover { background: var(--lh-blue); color: #fff; }
+
+/* ── Bootstrap override ──────────────────────────────────────────────────── */
+.btn-primary {
+    background: var(--lh-blue);
+    border-color: var(--lh-blue);
+    font-weight: 600;
+}
+.btn-primary:hover { background: var(--lh-blue-dark); border-color: var(--lh-blue-dark); }
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--lh-blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+/* ── Responsive tweaks ───────────────────────────────────────────────────── */
+@media (max-width: 576px) {
+    .lh-hero { padding: 60px 0 50px; }
+    .lh-hero-stats { gap: 1.25rem; }
+    .lh-cert-meta { flex-direction: column; text-align: center; }
+    .lh-cert-footer { flex-direction: column; align-items: center; }
+}
+
+/* ── Profile dropdown ────────────────────────────────────────────────────── */
+.lh-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background: rgba(255,255,255,.08);
+    border: 1.5px solid rgba(255,255,255,.15);
+    border-radius: 50px;
+    padding: .3rem .75rem .3rem .3rem;
+    cursor: pointer;
+    transition: background .2s;
+    color: #fff;
+}
+.lh-profile-btn:hover { background: rgba(255,255,255,.15); }
+.lh-profile-btn::after { display: none; } /* hide default caret */
+.lh-profile-btn .dropdown-toggle::after { display: none; }
+
+.lh-profile-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.lh-dropdown {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    min-width: 200px;
+    padding: .25rem 0;
+    margin-top: .5rem !important;
+}
+
+.lh-dropdown .dropdown-item {
+    font-size: .88rem;
+    padding: .6rem 1rem;
+    border-radius: 0;
+    transition: background .15s;
+}
+.lh-dropdown .dropdown-item:hover { background: #f1f5f9; }

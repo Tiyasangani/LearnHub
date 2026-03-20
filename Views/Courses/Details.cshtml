@@ -1,0 +1,275 @@
+@model LearnHub.Models.Course
+@{
+    ViewData["Title"] = Model.Title;
+    var isLoggedIn = Context.Session.GetInt32("UserId") != null;
+    var isEnrolled = ViewBag.IsEnrolled as bool? ?? false;
+
+    var topicsByCategory = new Dictionary<string, List<(string Section, List<string> Topics)>>
+    {
+        ["Programming"] = new() {
+            ("Getting Started", new() { "Setting up your development environment", "Understanding variables and data types", "Writing your first program", "Comments and code structure" }),
+            ("Core Concepts", new() { "Control flow: if/else and loops", "Functions and reusable code", "Lists, tuples and dictionaries", "String manipulation" }),
+            ("Intermediate Topics", new() { "Object-Oriented Programming (OOP)", "Classes, objects and inheritance", "File handling and exceptions", "Modules and packages" }),
+            ("Projects", new() { "Build a number guessing game", "Create a simple calculator", "Build a grade tracker", "Final capstone project" })
+        },
+        ["Web Development"] = new() {
+            ("HTML Fundamentals", new() { "HTML document structure", "Text, links and images", "Forms and input elements", "Semantic HTML5 tags" }),
+            ("CSS Styling", new() { "Selectors, properties and values", "Box model and layout", "Flexbox and CSS Grid", "Responsive design" }),
+            ("JavaScript", new() { "Variables, functions and events", "DOM manipulation", "Fetch API and AJAX", "ES6+ features" }),
+            ("Frameworks & Deploy", new() { "Introduction to React.js", "Node.js and Express", "Database integration", "Deploy your site live" })
+        },
+        ["Data Science"] = new() {
+            ("Data Foundations", new() { "Introduction to R programming", "Data types and structures", "Importing and exporting data", "Data cleaning techniques" }),
+            ("Exploratory Analysis", new() { "Descriptive statistics", "Visualisation with ggplot2", "Identifying patterns", "Handling missing data" }),
+            ("Machine Learning", new() { "Linear and logistic regression", "Decision trees", "Model evaluation", "Cross-validation" }),
+            ("Advanced Topics", new() { "Time series analysis", "Clustering algorithms", "PCA analysis", "Capstone project" })
+        },
+        ["Design"] = new() {
+            ("Design Fundamentals", new() { "Visual design principles", "Typography and colour theory", "Layout and grid systems", "Gestalt principles" }),
+            ("UI Design", new() { "Wireframing and sketching", "Designing with Figma", "Component libraries", "Accessibility in UI" }),
+            ("UX Research", new() { "User research methods", "Creating user personas", "User journey mapping", "Usability testing" }),
+            ("Portfolio & Career", new() { "Building your portfolio", "Case study writing", "Client presentation", "Freelancing tips" })
+        },
+        ["Artificial Intelligence"] = new() {
+            ("ML Foundations", new() { "What is Machine Learning?", "Supervised vs unsupervised", "Python ML environment setup", "Data preprocessing" }),
+            ("Core Algorithms", new() { "Linear regression", "Classification algorithms", "Neural network basics", "Gradient descent" }),
+            ("Deep Learning", new() { "Convolutional Neural Networks", "Recurrent Neural Networks", "Transfer learning", "NLP basics" }),
+            ("Projects", new() { "Image classification", "Sentiment analysis", "Recommendation engine", "Deploy ML model as API" })
+        },
+        ["Marketing"] = new() {
+            ("Marketing Foundations", new() { "Digital marketing overview", "Setting SMART goals", "Understanding your audience", "Building a funnel" }),
+            ("SEO & Content", new() { "Keyword research", "On-page and off-page SEO", "Content marketing strategy", "Blogging and copywriting" }),
+            ("Social Media & Ads", new() { "Social media strategy", "Facebook and Instagram ads", "Google Ads (PPC)", "Analytics and ROI" }),
+            ("Growth & Automation", new() { "Email marketing", "Marketing automation", "A/B testing", "Building a growth strategy" })
+        },
+        ["Mobile Development"] = new() {
+            ("Swift Basics", new() { "Xcode setup", "Swift variables and types", "Control flow and functions", "Optionals and error handling" }),
+            ("SwiftUI", new() { "Building your first view", "Layouts and grids", "Navigation and tab bars", "State management" }),
+            ("App Features", new() { "Working with APIs and JSON", "Core Data storage", "Push notifications", "Camera access" }),
+            ("Publishing", new() { "Testing on simulators", "App Store guidelines", "Creating screenshots", "Submitting your app" })
+        },
+        ["Cybersecurity"] = new() {
+            ("Security Fundamentals", new() { "CIA triad explained", "Types of cyber threats", "Networking basics", "Setting up a lab" }),
+            ("Ethical Hacking", new() { "Reconnaissance techniques", "Vulnerability scanning", "Exploitation basics", "Password cracking" }),
+            ("Defensive Security", new() { "Firewalls and IDS", "Encryption and cryptography", "Secure coding", "Incident response" }),
+            ("Certifications Prep", new() { "CompTIA Security+ overview", "OWASP Top 10", "Penetration testing", "Security portfolio" })
+        }
+    };
+
+    var topics = topicsByCategory.ContainsKey(Model.Category) ? topicsByCategory[Model.Category] : topicsByCategory["Programming"];
+    int totalTopics = topics.Sum(s => s.Topics.Count);
+}
+
+<!-- Hero -->
+<section class="cd-hero">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index" class="text-white-50 text-decoration-none">Courses</a></li>
+                <li class="breadcrumb-item text-white-50 active">@Model.Title</li>
+            </ol>
+        </nav>
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-7">
+                <span class="cd-badge">@Model.Category</span>
+                <h1 class="cd-title mt-2">@Model.Title</h1>
+                <p class="cd-desc">@Model.Description</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="cd-pill"><i class="bi bi-star-fill text-warning me-1"></i>@Model.Rating rating</span>
+                    <span class="cd-pill"><i class="bi bi-people-fill text-warning me-1"></i>@Model.StudentCount.ToString("N0") students</span>
+                    <span class="cd-pill"><i class="bi bi-person-fill text-warning me-1"></i>@Model.Instructor</span>
+                    <span class="cd-pill"><i class="bi bi-collection-fill text-warning me-1"></i>@totalTopics lessons</span>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="cd-card">
+                    <img src="@Model.ImageUrl" alt="@Model.Title" class="cd-card-img" onerror="this.src='/images/course-default.jpg'" />
+                    <div class="p-4">
+                        <div class="d-flex align-items-baseline gap-2 mb-3">
+                            <span class="cd-price">₹@Model.Price</span>
+                            <span class="text-muted text-decoration-line-through small">₹@(Model.Price * 2)</span>
+                            <span class="badge bg-danger" style="font-size:.7rem;">50% OFF</span>
+                        </div>
+                        @if (isEnrolled)
+                        {
+                            <div class="alert alert-success py-2 small mb-2"><i class="bi bi-check-circle-fill me-1"></i>You're enrolled!</div>
+                            <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@Model.Id" class="btn btn-success w-100 fw-semibold mb-2"><i class="bi bi-play-circle me-1"></i>Take Quiz</a>
+                        }
+                        else if (isLoggedIn)
+                        {
+                            <a asp-controller="Payment" asp-action="Checkout" asp-route-courseId="@Model.Id" class="btn btn-primary w-100 fw-semibold mb-2"><i class="bi bi-bag-check me-1"></i>Enroll Now — ₹@Model.Price</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100 fw-semibold mb-2"><i class="bi bi-box-arrow-in-right me-1"></i>Log In to Enroll</a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary w-100 fw-semibold mb-2">Create Free Account</a>
+                        }
+                        <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@Model.Id" class="btn btn-outline-success w-100 fw-semibold"><i class="bi bi-play me-1"></i>Try Free Quiz</a>
+                        <p class="text-center text-muted small mt-3 mb-0"><i class="bi bi-shield-check text-success me-1"></i>30-Day Money-Back Guarantee</p>
+                        <hr />
+                        <ul class="list-unstyled mb-0" style="display:flex;flex-direction:column;gap:.5rem;">
+                            <li class="small d-flex gap-2"><i class="bi bi-infinity text-primary"></i>Lifetime access</li>
+                            <li class="small d-flex gap-2"><i class="bi bi-phone text-primary"></i>Mobile & desktop</li>
+                            <li class="small d-flex gap-2"><i class="bi bi-award text-primary"></i>Certificate on completion</li>
+                            <li class="small d-flex gap-2"><i class="bi bi-people text-primary"></i>Community support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Body -->
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+
+            <!-- What You'll Learn -->
+            <div class="lh-card p-4 mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-lightbulb-fill text-warning me-2"></i>What You'll Learn</h5>
+                <div class="row g-2">
+                    @foreach (var item in new[] {
+                        "Build real-world projects from scratch",
+                        "Master industry-standard tools",
+                        "Write clean, professional code",
+                        "Understand core concepts deeply",
+                        "Solve real problems confidently",
+                        "Earn a verified certificate"
+                    })
+                    {
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2 align-items-start">
+                                <i class="bi bi-check2-circle text-success mt-1 flex-shrink-0"></i>
+                                <span class="small">@item</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Curriculum -->
+            <div class="lh-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-list-ol text-primary me-2"></i>Course Curriculum</h5>
+                    <span class="text-muted small">@topics.Count sections · @totalTopics lessons</span>
+                </div>
+                <div class="accordion accordion-flush" id="acc">
+                    @for (int s = 0; s < topics.Count; s++)
+                    {
+                        var sec = topics[s];
+                        var sid = $"sec{s}";
+                        <div class="accordion-item border rounded mb-2 overflow-hidden">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button @(s > 0 ? "collapsed" : "") cd-acc-btn fw-semibold"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#@sid">
+                                    <span class="cd-sec-num">@(s+1)</span>
+                                    @sec.Section
+                                    <span class="ms-auto me-3 text-muted small fw-normal">@sec.Topics.Count lessons</span>
+                                </button>
+                            </h2>
+                            <div id="@sid" class="accordion-collapse collapse @(s == 0 ? "show" : "")" data-bs-parent="#acc">
+                                <div class="accordion-body p-0">
+                                    @for (int t = 0; t < sec.Topics.Count; t++)
+                                    {
+                                        <div class="cd-topic @(t < sec.Topics.Count-1 ? "border-bottom" : "")">
+                                            <i class="bi @(t == 0 ? "bi-play-circle-fill text-primary" : "bi-lock-fill text-muted") cd-topic-icon"></i>
+                                            <span class="small flex-grow-1">@sec.Topics[t]</span>
+                                            @if (t == 0)
+                                            {
+                                                <span class="badge bg-success bg-opacity-10 text-success" style="font-size:.7rem;">Free</span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Requirements -->
+            <div class="lh-card p-4 mb-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-check-square text-primary me-2"></i>Requirements</h5>
+                <ul class="cd-req-list">
+                    <li>No prior experience needed — we start from scratch</li>
+                    <li>A computer with internet connection (Windows, Mac or Linux)</li>
+                    <li>Willingness to learn and practice regularly</li>
+                    <li>All required tools and software are free</li>
+                </ul>
+            </div>
+
+            <!-- Instructor -->
+            <div class="lh-card p-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-person-badge-fill text-primary me-2"></i>Your Instructor</h5>
+                <div class="d-flex gap-3 align-items-start">
+                    <div class="cd-inst-av flex-shrink-0">@Model.Instructor[0]</div>
+                    <div>
+                        <div class="fw-bold">@Model.Instructor</div>
+                        <div class="text-muted small mb-2">Expert · @Model.Category</div>
+                        <div class="d-flex flex-wrap gap-3 mb-2 small">
+                            <span><i class="bi bi-star-fill text-warning me-1"></i>@Model.Rating Rating</span>
+                            <span class="text-muted"><i class="bi bi-people-fill me-1"></i>@Model.StudentCount.ToString("N0") Students</span>
+                        </div>
+                        <p class="text-muted small mb-0">An industry expert with hands-on experience, passionate about teaching and helping students succeed in @Model.Category.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky sidebar -->
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="lh-card p-4 text-center" style="position:sticky;top:90px;">
+                <div class="cd-price mb-1">₹@Model.Price</div>
+                <div class="text-muted small mb-3">
+                    <span class="text-decoration-line-through">₹@(Model.Price * 2)</span>
+                    <span class="text-danger fw-semibold ms-2">50% off today!</span>
+                </div>
+                @if (isEnrolled)
+                {
+                    <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@Model.Id" class="btn btn-success w-100 fw-semibold mb-2"><i class="bi bi-play-circle me-1"></i>Take Quiz</a>
+                }
+                else if (isLoggedIn)
+                {
+                    <a asp-controller="Payment" asp-action="Checkout" asp-route-courseId="@Model.Id" class="btn btn-primary w-100 fw-semibold mb-2"><i class="bi bi-bag-check me-1"></i>Enroll Now</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100 fw-semibold mb-2">Log In to Enroll</a>
+                }
+                <p class="text-muted small mb-3"><i class="bi bi-shield-check text-success me-1"></i>30-Day Money-Back Guarantee</p>
+                <hr />
+                <p class="small fw-semibold mb-2 text-start">This course includes:</p>
+                <ul class="list-unstyled text-start" style="display:flex;flex-direction:column;gap:.5rem;">
+                    <li class="small d-flex gap-2"><i class="bi bi-play-circle text-primary"></i>@totalTopics on-demand lessons</li>
+                    <li class="small d-flex gap-2"><i class="bi bi-infinity text-primary"></i>Full lifetime access</li>
+                    <li class="small d-flex gap-2"><i class="bi bi-phone text-primary"></i>Mobile & desktop access</li>
+                    <li class="small d-flex gap-2"><i class="bi bi-award text-primary"></i>Certificate of completion</li>
+                    <li class="small d-flex gap-2"><i class="bi bi-people text-primary"></i>Community support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cd-hero { background: linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1d4ed8 100%); padding:60px 0; color:#fff; }
+.cd-title { font-size:clamp(1.5rem,3vw,2rem); font-weight:800; line-height:1.25; margin-bottom:.75rem; }
+.cd-desc { color:rgba(255,255,255,.75); line-height:1.7; }
+.cd-badge { background:#2563eb; color:#fff; font-size:.78rem; font-weight:700; padding:.3rem .9rem; border-radius:50px; }
+.cd-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:50px; padding:.25rem .8rem; font-size:.8rem; color:rgba(255,255,255,.85); }
+.cd-card { background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 12px 48px rgba(0,0,0,.22); }
+.cd-card-img { width:100%; height:195px; object-fit:cover; }
+.cd-price { font-size:1.9rem; font-weight:800; color:#0f172a; }
+.cd-acc-btn { background:#f8fafc; font-size:.9rem; gap:.75rem; padding:.9rem 1rem; }
+.cd-acc-btn:not(.collapsed) { background:#eff6ff; color:#2563eb; box-shadow:none; }
+.cd-sec-num { width:26px; height:26px; border-radius:50%; background:#2563eb; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; flex-shrink:0; }
+.cd-topic { display:flex; align-items:center; gap:.75rem; padding:.7rem 1rem; transition:background .15s; }
+.cd-topic:hover { background:#f8fafc; }
+.cd-topic-icon { width:20px; text-align:center; flex-shrink:0; font-size:.9rem; }
+.cd-req-list { list-style:none; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+.cd-req-list li { font-size:.9rem; color:#475569; padding-left:1.5rem; position:relative; }
+.cd-req-list li::before { content:'▸'; position:absolute; left:0; color:#2563eb; }
+.cd-inst-av { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2563eb,#7c3aed); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:800; }
+</style>

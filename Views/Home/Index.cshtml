@@ -1,0 +1,102 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- ── Hero Section ────────────────────────────────────────────────────── -->
+<section class="lh-hero">
+    <div class="container text-center">
+        <span class="lh-hero-badge"><i class="bi bi-play-circle me-1"></i>Over 500+ courses available</span>
+        <h1 class="lh-hero-title">Unlock Your Potential with<br />World-Class Online Learning</h1>
+        <p class="lh-hero-sub">Learn from industry experts, build real-world skills, and advance your career<br class="d-none d-md-block" />with our curated collection of premium courses.</p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a asp-controller="Courses" asp-action="Index" class="btn btn-primary btn-lg px-4">
+                Explore Courses <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg px-4">Join for Free</a>
+        </div>
+        <div class="lh-hero-stats">
+            <span><i class="bi bi-people me-1"></i>120K+ Students</span>
+            <span><i class="bi bi-journal-bookmark me-1"></i>500+ Courses</span>
+            <span><i class="bi bi-person-badge me-1"></i>Expert Instructors</span>
+        </div>
+    </div>
+</section>
+
+<!-- ── Featured Courses ─────────────────────────────────────────────────── -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="lh-section-label">FEATURED COURSES</span>
+            <h2 class="lh-section-title">Start Learning Today</h2>
+            <p class="text-muted">Discover our most popular courses, handpicked by our team of experts</p>
+        </div>
+        <div class="row g-4" id="featuredCourses">
+            @foreach (var course in Model.FeaturedCourses)
+            {
+                @await Html.PartialAsync("_CourseCard", course)
+            }
+        </div>
+        <div class="text-center mt-5">
+            <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-dark px-4">
+                View All Courses <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ── Categories ───────────────────────────────────────────────────────── -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="lh-section-label">CATEGORIES</span>
+            <h2 class="lh-section-title">Browse by Category</h2>
+            <p class="text-muted">Find courses in the area that interests you most.</p>
+        </div>
+        <div class="row g-3">
+            @foreach (var cat in Model.Categories)
+            {
+                <div class="col-6 col-md-3">
+                    <a asp-controller="Courses" asp-action="Index" asp-route-category="@cat.Name"
+                       class="lh-category-card text-decoration-none">
+                        <i class="bi @cat.Icon lh-cat-icon"></i>
+                        <div class="fw-semibold mt-2">@cat.Name</div>
+                        <small class="text-muted">@cat.Count courses</small>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ── CTA Banner ────────────────────────────────────────────────────────── -->
+<section class="lh-cta">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Start Your Learning Journey?</h2>
+        <p class="mb-4 opacity-75">Join thousands of students who are already building their future with LearnHub.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg px-4">
+                Get Started for Free <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-light btn-lg px-4">Browse Courses</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    // Fetch featured courses via API and re-render (demonstrates Fetch API usage)
+    async function loadFeaturedCourses() {
+        try {
+            const res = await fetch('/api/courses/featured');
+            if (!res.ok) return; // fall back to server-rendered content
+            const courses = await res.json();
+            // Data is already rendered server-side; this shows the pattern
+            console.log('Featured courses loaded via API:', courses.length);
+        } catch (e) {
+            console.log('Using server-rendered courses');
+        }
+    }
+    loadFeaturedCourses();
+</script>
+}

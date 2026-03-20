@@ -1,0 +1,84 @@
+@model LearnHub.Models.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<h4 class="fw-bold mb-1">Admin Dashboard</h4>
+<p class="text-muted mb-4">Welcome back! Here's an overview of your platform.</p>
+
+<!-- Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div>
+                <p class="text-muted small mb-1">Total Courses</p>
+                <h3 class="fw-bold mb-0">@Model.TotalCourses</h3>
+                <a asp-action="ManageCourses" class="small lh-link">View Details <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="admin-stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-journal-bookmark-fill"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div>
+                <p class="text-muted small mb-1">Total Users</p>
+                <h3 class="fw-bold mb-0">@Model.TotalUsers</h3>
+                <a asp-action="ManageUsers" class="small lh-link">View Details <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="admin-stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-people-fill"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div>
+                <p class="text-muted small mb-1">Total Enrollments</p>
+                <h3 class="fw-bold mb-0">@Model.TotalEnrollments</h3>
+                <span class="small text-muted">All time</span>
+            </div>
+            <div class="admin-stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<h6 class="fw-semibold mb-3">Quick Actions</h6>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a asp-action="AddCourse" class="admin-action-card bg-primary text-white text-decoration-none">
+            <i class="bi bi-plus-circle-fill fs-3 mb-2"></i>
+            <div class="fw-semibold">Add New Course</div>
+            <small class="opacity-75">Create a new course for students</small>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-action="ManageCourses" class="admin-action-card bg-secondary text-white text-decoration-none">
+            <i class="bi bi-journal-text fs-3 mb-2"></i>
+            <div class="fw-semibold">Manage Courses</div>
+            <small class="opacity-75">View and edit existing courses</small>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-action="ManageUsers" class="admin-action-card bg-secondary text-white text-decoration-none">
+            <i class="bi bi-people-fill fs-3 mb-2"></i>
+            <div class="fw-semibold">Manage Users</div>
+            <small class="opacity-75">View and manage registered users</small>
+        </a>
+    </div>
+</div>
+
+<!-- Platform tip -->
+<div class="admin-tip-banner">
+    <div>
+        <h6 class="fw-bold mb-1">Manage Your Platform</h6>
+        <p class="mb-0 small opacity-75">Use the sidebar to navigate between different sections. You can add courses, manage users, and view platform statistics.</p>
+    </div>
+    <i class="bi bi-bar-chart-line-fill fs-1 opacity-25"></i>
+</div>

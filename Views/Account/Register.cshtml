@@ -1,0 +1,81 @@
+@model LearnHub.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="lh-auth-page">
+    <div class="lh-auth-card">
+        <div class="text-center mb-4">
+            <div class="lh-auth-logo"><i class="bi bi-journal-bookmark-fill"></i></div>
+            <h4 class="fw-bold mt-3">Create an account</h4>
+            <p class="text-muted small">Start your learning journey today</p>
+        </div>
+
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Full Name</label>
+                <div class="lh-input-wrap">
+                    <i class="bi bi-person lh-input-icon"></i>
+                    <input asp-for="FullName" class="form-control lh-input" placeholder="John Doe" />
+                </div>
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Email</label>
+                <div class="lh-input-wrap">
+                    <i class="bi bi-envelope lh-input-icon"></i>
+                    <input asp-for="Email" class="form-control lh-input" placeholder="you@example.com" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Password</label>
+                <div class="lh-input-wrap">
+                    <i class="bi bi-lock lh-input-icon"></i>
+                    <input asp-for="Password" type="password" id="passInput" class="form-control lh-input" placeholder="At least 6 characters" />
+                    <button type="button" class="lh-eye-btn" onclick="togglePass('passInput','eye1')">
+                        <i class="bi bi-eye" id="eye1"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-semibold">Confirm Password</label>
+                <div class="lh-input-wrap">
+                    <i class="bi bi-lock lh-input-icon"></i>
+                    <input asp-for="ConfirmPassword" type="password" id="confirmInput" class="form-control lh-input" placeholder="Confirm your password" />
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Create Account</button>
+
+            <p class="text-center small mt-3 text-muted">
+                Already have an account?
+                <a asp-controller="Account" asp-action="Login" class="lh-link fw-semibold">Log in</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function togglePass(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+</script>
+}

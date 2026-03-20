@@ -1,0 +1,127 @@
+@model LearnHub.Models.PaymentViewModel
+@{
+    ViewData["Title"] = "Complete Enrollment";
+}
+
+<div class="container py-4">
+    <a href="javascript:history.back()" class="text-muted text-decoration-none small mb-3 d-inline-block">
+        <i class="bi bi-arrow-left me-1"></i>Back
+    </a>
+    <h4 class="fw-bold mb-4">Complete Your Enrollment</h4>
+
+    <div class="row g-4">
+        <!-- Payment form -->
+        <div class="col-lg-7">
+            <div class="lh-card p-4">
+                <h6 class="fw-semibold mb-3">Payment Method</h6>
+
+                <!-- Method tabs -->
+                <div class="d-flex gap-2 mb-4" id="paymentTabs">
+                    <button type="button" class="lh-pay-tab active" data-method="CreditCard" onclick="selectMethod(this)">
+                        <i class="bi bi-credit-card me-1"></i>Credit Card
+                    </button>
+                    <button type="button" class="lh-pay-tab" data-method="UPI" onclick="selectMethod(this)">
+                        <i class="bi bi-phone me-1"></i>UPI
+                    </button>
+                    <button type="button" class="lh-pay-tab" data-method="PayPal" onclick="selectMethod(this)">
+                        <i class="bi bi-wallet2 me-1"></i>PayPal
+                    </button>
+                </div>
+
+                <form asp-action="Checkout" method="post" id="paymentForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="CourseId" />
+                    <input type="hidden" asp-for="PaymentMethod" id="paymentMethodInput" value="CreditCard" />
+
+                    <!-- Credit card fields -->
+                    <div id="creditCardFields">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Cardholder Name</label>
+                            <input asp-for="CardholderName" class="form-control" placeholder="John Doe" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Card Number</label>
+                            <input asp-for="CardNumber" class="form-control" placeholder="1234 5678 9012 3456"
+                                   maxlength="19" oninput="formatCard(this)" />
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Expiry Date</label>
+                                <input asp-for="ExpiryDate" class="form-control" placeholder="MM/YY" maxlength="5" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">CVV</label>
+                                <input asp-for="Cvv" class="form-control" placeholder="123" maxlength="4" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPI fields -->
+                    <div id="upiFields" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">UPI ID</label>
+                            <input type="text" class="form-control" placeholder="yourname@upi" />
+                        </div>
+                    </div>
+
+                    <!-- PayPal fields -->
+                    <div id="paypalFields" class="d-none">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">PayPal Email</label>
+                            <input type="email" class="form-control" placeholder="you@paypal.com" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                        Confirm Payment — ₹@Model.Course?.Price
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order summary -->
+        <div class="col-lg-5">
+            <div class="lh-card p-4">
+                <h6 class="fw-semibold mb-3">Order Summary</h6>
+                @if (Model.Course != null)
+                {
+                    <img src="@Model.Course.ImageUrl" alt="@Model.Course.Title"
+                         class="w-100 rounded mb-3" style="height:160px;object-fit:cover;"
+                         onerror="this.src='/images/course-default.jpg'" />
+                    <h6 class="fw-bold">@Model.Course.Title</h6>
+                    <p class="text-muted small">by @Model.Course.Instructor</p>
+                    <hr />
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span>Course Price</span><span>₹@Model.Course.Price</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span>Platform Fee</span><span>₹0.00</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total</span><span>₹@Model.Course.Price</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function selectMethod(btn) {
+        document.querySelectorAll('.lh-pay-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const method = btn.dataset.method;
+        document.getElementById('paymentMethodInput').value = method;
+        document.getElementById('creditCardFields').classList.toggle('d-none', method !== 'CreditCard');
+        document.getElementById('upiFields').classList.toggle('d-none', method !== 'UPI');
+        document.getElementById('paypalFields').classList.toggle('d-none', method !== 'PayPal');
+    }
+
+    function formatCard(input) {
+        let v = input.value.replace(/\D/g, '').substring(0, 16);
+        input.value = v.match(/.{1,4}/g)?.join(' ') ?? v;
+    }
+</script>
+}

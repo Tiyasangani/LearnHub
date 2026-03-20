@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Quiz Result";
+    var course = ViewBag.Course as LearnHub.Models.Course;
+    int score = ViewBag.Score;
+    int total = ViewBag.Total;
+    bool passed = ViewBag.Passed;
+    int pct = total > 0 ? (int)Math.Round((double)score / total * 100) : 0;
+}
+
+<div class="container py-5 text-center">
+    <div class="lh-card mx-auto p-5" style="max-width:500px;">
+        @if (passed)
+        {
+            <div class="text-success mb-3" style="font-size:3.5rem;"><i class="bi bi-trophy-fill"></i></div>
+            <h3 class="fw-bold text-success">Congratulations!</h3>
+            <p class="text-muted mb-3">You passed the quiz!</p>
+        }
+        else
+        {
+            <div class="text-danger mb-3" style="font-size:3.5rem;"><i class="bi bi-x-circle-fill"></i></div>
+            <h3 class="fw-bold text-danger">Not quite there!</h3>
+            <p class="text-muted mb-3">You need 60% to pass. Keep practicing!</p>
+        }
+
+        <div class="lh-score-ring mb-4">
+            <span class="lh-score-num">@pct%</span>
+        </div>
+
+        <p class="mb-4">You answered <strong>@score out of @total</strong> questions correctly.</p>
+
+        <div class="d-flex gap-2 justify-content-center flex-wrap">
+            @if (passed && course != null)
+            {
+                <a asp-controller="Certificate" asp-action="View" asp-route-courseId="@course.Id"
+                   class="btn btn-primary px-4">
+                    <i class="bi bi-award me-1"></i>View Certificate
+                </a>
+            }
+            @if (course != null)
+            {
+                <a asp-controller="Quiz" asp-action="Take" asp-route-courseId="@course.Id"
+                   class="btn btn-outline-secondary px-4">Retake Quiz</a>
+            }
+            <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-secondary px-4">All Courses</a>
+        </div>
+    </div>
+</div>

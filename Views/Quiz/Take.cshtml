@@ -1,0 +1,84 @@
+@model LearnHub.Models.QuizViewModel
+@{
+    ViewData["Title"] = "Quiz - " + Model.CourseTitle;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="lh-card p-4 p-md-5">
+                <h5 class="fw-bold mb-1">@Model.CourseTitle Quiz</h5>
+                <p class="text-muted small mb-4" id="questionCounter">Question 1 of @Model.Questions.Count</p>
+
+                <form asp-action="Submit" method="post" id="quizForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="courseId" value="@Model.CourseId" />
+
+                    @for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        var q = Model.Questions[i];
+                        <div class="quiz-question @(i == 0 ? "" : "d-none")" data-index="@i">
+                            <h6 class="fw-semibold mb-3">@q.QuestionText</h6>
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (var opt in new[] {
+                                    new { Key = "A", Text = q.OptionA },
+                                    new { Key = "B", Text = q.OptionB },
+                                    new { Key = "C", Text = q.OptionC },
+                                    new { Key = "D", Text = q.OptionD }
+                                })
+                                {
+                                    <label class="lh-quiz-option">
+                                        <input type="radio" name="answers[@q.Id]" value="@opt.Key" class="quiz-radio" />
+                                        <span>@opt.Text</span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button type="button" class="btn btn-outline-secondary" id="prevBtn" onclick="navigate(-1)" disabled>
+                            <i class="bi bi-arrow-left me-1"></i>Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="navigate(1)">
+                            Next <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success d-none" id="submitBtn">
+                            <i class="bi bi-check2 me-1"></i>Submit Quiz
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let current = 0;
+    const questions = document.querySelectorAll('.quiz-question');
+    const total = questions.length;
+
+    function navigate(dir) {
+        questions[current].classList.add('d-none');
+        current += dir;
+        questions[current].classList.remove('d-none');
+
+        document.getElementById('questionCounter').textContent = `Question ${current + 1} of ${total}`;
+        document.getElementById('prevBtn').disabled = current === 0;
+
+        const isLast = current === total - 1;
+        document.getElementById('nextBtn').classList.toggle('d-none', isLast);
+        document.getElementById('submitBtn').classList.toggle('d-none', !isLast);
+    }
+
+    // Highlight selected option
+    document.querySelectorAll('.quiz-radio').forEach(radio => {
+        radio.addEventListener('change', () => {
+            const siblings = radio.closest('.quiz-question').querySelectorAll('.lh-quiz-option');
+            siblings.forEach(opt => opt.classList.remove('selected'));
+            radio.closest('.lh-quiz-option').classList.add('selected');
+        });
+    });
+</script>
+}

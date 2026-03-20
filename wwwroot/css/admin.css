@@ -1,0 +1,146 @@
+/* ═══════════════════════════════════════════════════════════════
+   LearnHub Admin — admin.css
+   ═══════════════════════════════════════════════════════════════ */
+
+.admin-body {
+    background: #f1f5f9;
+    min-height: 100vh;
+}
+
+/* ── Layout ────────────────────────────────────────────────────── */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────── */
+.admin-sidebar {
+    width: 240px;
+    background: #fff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 2px 0 12px rgba(0,0,0,.04);
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .5rem .5rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: .9rem;
+}
+
+.admin-nav { flex: 1; }
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .7rem .9rem;
+    border-radius: 10px;
+    color: #475569;
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    margin-bottom: .2rem;
+    transition: background .18s, color .18s;
+}
+
+.admin-nav-link:hover { background: #f1f5f9; color: #0f172a; }
+.admin-nav-link.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+.admin-nav-link i { font-size: 1rem; }
+
+.admin-sidebar-footer {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 1rem;
+}
+
+/* ── Main content ─────────────────────────────────────────────── */
+.admin-main {
+    margin-left: 240px;
+    flex: 1;
+    padding: 2rem 2rem 2rem 2.5rem;
+    min-height: 100vh;
+}
+
+/* ── Stats card ───────────────────────────────────────────────── */
+.admin-stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+
+.admin-stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+/* ── Quick action card ────────────────────────────────────────── */
+.admin-action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+.admin-action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+
+/* ── Tip banner ───────────────────────────────────────────────── */
+.admin-tip-banner {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 14px;
+    padding: 1.75rem;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ── User avatar ──────────────────────────────────────────────── */
+.lh-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
+}
+
+/* ── Responsive admin ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .admin-sidebar { display: none; }
+    .admin-main { margin-left: 0; padding: 1rem; }
+}
