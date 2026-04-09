@@ -1,6 +1,6 @@
 @model LearnHub.Models.Certificate
 @{
-    ViewData["Title"] = " Certificate ";
+    ViewData["Title"] = " Certificate   ";
 }
 
 <div class="container py-5">
@@ -16,7 +16,7 @@
         <p class="lh-cert-awarded">This is to certify that</p>
         <h2 class="lh-cert-name">@Model.User?.FullName</h2>
 
-        <p class="lh-cert-awarded">has successfully completed the course</p>
+        <p class="lh-cert-awarded">has successfully completed the courses</p>
         <h4 class="lh-cert-course">"@Model.Course?.Title"</h4>
 
         <div class="lh-cert-meta">
